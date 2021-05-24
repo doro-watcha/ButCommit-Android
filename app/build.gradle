@@ -4,6 +4,7 @@ plugins {
 }
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
@@ -48,15 +49,66 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+
     // kotlin koin
     implementation "org.koin:koin-androidx-ext:2.0.1"
     implementation "org.koin:koin-androidx-scope:2.0.1"
     implementation "org.koin:koin-androidx-viewmodel:2.0.1"
     implementation "org.koin:koin-test:2.0.1"
 
+    // rx java
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation "com.jakewharton.rxbinding3:rxbinding:3.0.0"
+    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.15"
+
+    // retrofit
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.7.1"
+    implementation "com.squareup.retrofit2:converter-gson:2.7.1"
+    implementation "com.squareup.retrofit2:converter-scalars:2.7.1"
+    implementation "com.squareup.retrofit2:retrofit:2.7.1"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.7.1"
+
+    // okhttp
+    implementation "com.squareup.okhttp3:logging-interceptor:4.3.1"
+    implementation "com.squareup.okhttp3:okhttp:4.3.1"
+
+    // glide
+    implementation "com.github.bumptech.glide:glide:4.11.0"
+
+    // lifecycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0-alpha01"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha01"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha01"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha01"
+
     //databinding
     implementation "androidx.databinding:databinding-adapters:3.6.3"
     implementation "androidx.databinding:databinding-common:3.6.3"
+
+
+    // avatar view
+    implementation "agency.tango.android:avatar-view:0.0.2"
+    implementation "agency.tango.android:avatar-view-bindings:0.0.2"
+
+    def room_version = "2.2.5"
+    kapt "androidx.room:room-compiler:2.2.5"
+    implementation "androidx.room:room-ktx:" + room_version
+    implementation "androidx.room:room-runtime:" + room_version
+    implementation "androidx.room:room-rxjava2:" + room_version
+    implementation "androidx.room:room-testing:" + room_version
+
+    // WorkManager
+    def work_manager_version = "2.3.4"
+    implementation "androidx.work:work-runtime-ktx:2.3.4"
+    implementation "androidx.work:work-rxjava2:" + work_manager_version
+
+    //Exo Player
+    def exo_player_version = "2.13.3"
+    implementation "com.google.android.exoplayer:exoplayer-core:" + exo_player_version
+
+    implementation "com.google.android.exoplayer:exoplayer-dash:" + exo_player_version
+    implementation "com.google.android.exoplayer:exoplayer-ui:" + exo_player_version
 
 
     //etc
@@ -67,18 +119,29 @@ dependencies {
     implementation "com.google.android.material:material:1.2.0-alpha05"
 
 
-    def room_version = "2.2.5"
-    kapt "androidx.room:room-compiler:2.2.5"
-    implementation "androidx.room:room-ktx:" + room_version
-    implementation "androidx.room:room-runtime:" + room_version
-    implementation "androidx.room:room-rxjava2:" + room_version
-    implementation "androidx.room:room-testing:" + room_version
+    implementation 'androidx.appcompat:appcompat:'
+    implementation 'androidx.constraintlayout:constraintlayout:'
 
-    // rx java
-    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
-    implementation "com.jakewharton.rxbinding3:rxbinding:3.0.0"
-    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
-    implementation "io.reactivex.rxjava2:rxjava:2.2.15"
+    implementation "com.karumi:dexter:6.0.2"
+
+    //circle image view
+    implementation "de.hdodenhof:circleimageview:3.1.0"
+
+    // fire base
+    implementation "com.google.firebase:firebase-auth:19.3.1"
+    implementation "com.google.firebase:firebase-core:17.4.2"
+    implementation "com.google.firebase:firebase-dynamic-links:19.1.0"
+    implementation "com.google.firebase:firebase-messaging:20.2.0"
+
+    implementation "com.google.android.gms:play-services-auth:18.0.0"
+
+    //databinding
+    implementation "androidx.databinding:databinding-adapters:3.6.3"
+    implementation "androidx.databinding:databinding-common:3.6.3"
+
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha01"
+
+    implementation platform('com.google.firebase:firebase-bom:28.0.1')
+    implementation 'com.google.firebase:firebase-analytics'
 }

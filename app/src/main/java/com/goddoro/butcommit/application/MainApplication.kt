@@ -1,7 +1,7 @@
 package com.goddoro.butcommit.application
 
 import android.app.Application
-import com.goddoro.butcommit.di.viewModelModule
+import com.goddoro.butcommit.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -30,7 +30,11 @@ class MainApplication : Application() {
             androidLogger(Level.INFO)
             modules(
                 listOf(
-                    viewModelModule
+                    viewModelModule,
+                    utilModule,
+                    apiModule,
+                    repositoryModule,
+                    networkModule
                 )
             )
         }

@@ -2,6 +2,7 @@ package com.goddoro.butcommit.di
 
 import androidx.lifecycle.ViewModel
 import com.goddoro.butcommit.MainViewModel
+import com.goddoro.butcommit.presentation.signIn.SignInViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -14,5 +15,6 @@ import org.koin.dsl.module
 val viewModelModule = module{
 
 
-    viewModel { MainViewModel() }
+    viewModel { MainViewModel(get(),get()) }
+    viewModel { SignInViewModel(get(),get())}
 }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.goddoro.butcommit.presentation.signIn.SignInViewModel" />
+
+    </data>
+
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.signIn.SignInActivity">
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/txt_github_id_please"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_github_id_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            app:layout_constraintStart_toStartOf="@id/txt_title"
+            app:layout_constraintEnd_toEndOf="@id/txt_title"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            app:boxBackgroundColor="@color/divider"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:hintEnabled="false"
+            app:layout_constraintTop_toBottomOf="@+id/txt_title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_github_id"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:padding="10dp"
+                android:text="@={vm.githubId}"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textColorHint="#808080"
+                android:textSize="14dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/edit_github_id_layout"
+            android:layout_marginTop="30dp"
+            android:text="@string/txt_confirm"
+            android:onDebounceClick="@{() -> vm.register()}"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:backgroundTint="@color/naverGreen"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

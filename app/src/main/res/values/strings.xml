@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ButCommit</string>
+
+    <string name="fcm_channel_id" translatable="false">BUT_COMMIT_CHANNEL_ID</string>
+    <string name="fcm_channel_name" translatable="false">그래도 Commit 알림</string>
+    <string name="fcm_channel_desc" translatable="false">그래도 Commit 알림</string>
+
+    <string name="txt_github_id_please">Github ID를 입력해주세요</string>
+    <string name="txt_confirm">완료</string>
+    <string name="txt_no_item">커밋 기록이 없습니다!</string>
 </resources>

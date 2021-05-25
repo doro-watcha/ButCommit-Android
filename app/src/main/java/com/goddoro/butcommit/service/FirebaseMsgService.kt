@@ -152,7 +152,7 @@ class FirebaseMsgService : FirebaseMessagingService() {
         _notificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val notificationBuilder = NotificationCompat.Builder(this, mContext.getString(R.string.fcm_channel_id))
-            .setSmallIcon(R.drawable.ic_android)
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(_title)
             .setContentText(messageBody)
             .setAutoCancel(true)

@@ -3,6 +3,7 @@ package com.goddoro.butcommit.presentation.signIn
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Window
 import android.view.WindowManager
@@ -35,6 +36,8 @@ class SignInActivity : AppCompatActivity() {
 
     private val dateUtil : DateUtil by inject()
 
+    private val toastUtil : ToastUtil by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,6 +69,10 @@ class SignInActivity : AppCompatActivity() {
                 )
             }
 
+            clickBackArrow.observeOnce(this@SignInActivity){
+                onBackPressed()
+            }
+
             onRegisterCompleted.observe(this@SignInActivity, Observer {
 
                 if ( it == true ) {
@@ -92,10 +99,10 @@ class SignInActivity : AppCompatActivity() {
                     when ( it.errorCode) {
 
                         402 -> {
-                            Toast.makeText(this@SignInActivity,"잘못된 아이디입니다", Toast.LENGTH_SHORT).show()
+                            toastUtil.makeToast("존재하지 않는 아이디입니다", Gravity.CENTER)
                         }
                         102 -> {
-                            Toast.makeText(this@SignInActivity,"아이디를 입력해주세요",Toast.LENGTH_SHORT).show()
+                            toastUtil.makeToast("아이디를 입력해주세요",Gravity.CENTER)
                         }
                         else -> {
                             Toast.makeText(this@SignInActivity,it.message,Toast.LENGTH_SHORT).show()

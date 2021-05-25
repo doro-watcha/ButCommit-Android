@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ButCommit</string>
+    <string name="app_name">But..Commit</string>
 
     <string name="fcm_channel_id" translatable="false">BUT_COMMIT_CHANNEL_ID</string>
     <string name="fcm_channel_name" translatable="false">그래도 Commit 알림</string>

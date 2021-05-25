@@ -24,6 +24,8 @@ class SignInViewModel(
         }
     }
 
+    val clickBackArrow : MutableLiveData<Once<Unit>> = MutableLiveData()
+
     val clickLoginButton: MutableLiveData<Once<Unit>> = MutableLiveData()
 
     val errorInvoked: MutableLiveData<Throwable> = MutableLiveData()
@@ -66,6 +68,10 @@ class SignInViewModel(
         if (appPreference.githubId != "") clickLoginButton.value = Once(Unit)
         else register()
 
+    }
+
+    fun onClickBackArrow() {
+        clickBackArrow.value = Once(Unit)
     }
 
 }

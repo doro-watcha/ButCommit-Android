@@ -1,5 +1,6 @@
 package com.goddoro.butcommit
 
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,6 +21,17 @@ class MainViewModel(
 ) : ViewModel() {
 
     val commits: MutableLiveData<List<Commit>> = MutableLiveData()
+    val grassCount = MediatorLiveData<Int>().apply {
+
+
+        addSource(commits){
+            if (it.isNotEmpty()) {
+                this.value = it.filter { commit ->
+                    commit.count > 0
+                }.size
+            }
+        }
+    }
 
     val clickSignIn : MutableLiveData<Once<Unit>> = MutableLiveData()
     val clickScreenShot : MutableLiveData<Once<Unit>> = MutableLiveData()

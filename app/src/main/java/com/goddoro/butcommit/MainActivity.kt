@@ -1,6 +1,8 @@
 package com.goddoro.butcommit
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -11,14 +13,13 @@ import androidx.lifecycle.Observer
 import com.goddoro.butcommit.databinding.ActivityMainBinding
 import com.goddoro.butcommit.presentation.signIn.SignInActivity
 import com.goddoro.butcommit.utils.*
-import com.goddoro.butcommit.utils.component.InformationDialog
-import com.goddoro.butcommit.utils.component.showInformationDialog
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,9 +54,9 @@ class MainActivity : AppCompatActivity() {
 
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor =  (ContextCompat.getColor(this,R.color.background_1))
+        window.statusBarColor =  (ContextCompat.getColor(this, R.color.background_1))
 
-        initView()
+        initTitle()
         initFirebaseSetting()
         observeViewModel()
         checkIsLogin()
@@ -67,24 +68,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun initView() {
+    private fun initTitle() {
 
-        var title : String = if ( appPreference.startDate != "") {
-
-            diff = dateUtil.calculateDiff(appPreference.startDate, dateUtil.getToday())
+        mBinding.txtTitle.text = if ( appPreference.startDate != "") {
 
             if ( diff == 0 ) {
                 "오늘 처음 잔디를 심으셨네요"
             } else {
-                "잔디를 ${diff+1}번 심으셨습니다."
+                "잔디를 ${mViewModel.grassCount.value ?:0 +1}일 심으셨습니다."
             }
-
         } else {
             "커밋 쉬는중"
         }
-
-        mBinding.txtTitle.text = title
-
     }
 
     private fun initFirebaseSetting() {
@@ -118,7 +113,11 @@ class MainActivity : AppCompatActivity() {
     private fun checkIsLogin() {
 
         if (appPreference.githubId == "") {
-            startActivity(SignInActivity::class, R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+            startActivity(
+                SignInActivity::class,
+                R.anim.slide_in_from_right,
+                R.anim.slide_out_to_left
+            )
         }
     }
 
@@ -147,24 +146,40 @@ class MainActivity : AppCompatActivity() {
         mViewModel.apply {
 
             clickSignIn.observeOnce(this@MainActivity) {
-                startActivity(SignInActivity::class, R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+                startActivity(
+                    SignInActivity::class,
+                    R.anim.slide_in_from_right,
+                    R.anim.slide_out_to_left
+                )
             }
 
             clickShare.observeOnce(this@MainActivity){
+                val intent = Intent(Intent.ACTION_SEND)
 
+                intent.type = "text/plain"
+                intent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name))
+
+                startActivity(Intent.createChooser(intent, "Share"))
             }
 
-            clickShare.observeOnce(this@MainActivity){
-
+            clickScreenShot.observeOnce(this@MainActivity){
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+                startActivity(intent)
             }
 
             onLoadCompleted.observe(this@MainActivity, Observer {
-                if (it){
+                if (it) {
                     toastUtil.makeToast("커밋 기록을 업데이트했습니다", Gravity.CENTER).show()
 
-                    if ((commits.value ?: listOf()).isNotEmpty() && ( commits.value ?: listOf())[0].count > 0 ) {
+                    if ((commits.value ?: listOf()).isNotEmpty() && (commits.value
+                            ?: listOf())[0].count > 0
+                    ) {
                         mBinding.animGrass.playAnimation()
+                    } else {
+                        mBinding.animGrass.pauseAnimation()
                     }
+                    initTitle()
                 }
                 if (it && mBinding.layoutRefresh.isRefreshing) {
 

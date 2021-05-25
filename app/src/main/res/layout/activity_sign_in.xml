@@ -19,6 +19,16 @@
         android:layout_height="match_parent"
         tools:context=".presentation.signIn.SignInActivity">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:onClick="@{() -> vm.onClickBackArrow()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
         <TextView
             android:id="@+id/txt_title"
             android:layout_width="wrap_content"
@@ -56,6 +66,7 @@
                 android:text="@={vm.githubId}"
                 android:gravity="center"
                 android:textColor="@color/black"
+                android:singleLine="true"
                 android:textColorHint="#808080"
                 android:textSize="14dp" />
 

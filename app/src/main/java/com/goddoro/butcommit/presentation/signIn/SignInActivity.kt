@@ -1,6 +1,5 @@
 package com.goddoro.butcommit.presentation.signIn
 
-import android.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +10,12 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
+import com.goddoro.butcommit.R
 import com.goddoro.butcommit.data.api.UnWrappingDataException
 import com.goddoro.butcommit.databinding.ActivitySignInBinding
 import com.goddoro.butcommit.utils.AppPreference
 import com.goddoro.butcommit.utils.Broadcast.onLoginCompleted
+import com.goddoro.butcommit.utils.DateUtil
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -27,6 +28,9 @@ class SignInActivity : AppCompatActivity() {
     private val mViewModel : SignInViewModel by viewModel()
 
     private val appPreference : AppPreference by inject()
+
+    private val dateUtil : DateUtil by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -50,10 +54,14 @@ class SignInActivity : AppCompatActivity() {
                 Toast.makeText(this@SignInActivity,"로그인에 성공하였습니다",Toast.LENGTH_SHORT).show()
                 if ( it == true ) {
                     appPreference.githubId = githubId.value ?: ""
-                    appPreference.startDate = "2021-05-19"
+                    appPreference.startDate = dateUtil.getToday()
                     onLoginCompleted.onNext(Unit)
                     finish()
                 }
+            })
+
+            onUpdateCompleted.observe(this@SignInActivity, Observer {
+
             })
 
             errorInvoked.observe(this@SignInActivity, Observer {
@@ -76,5 +84,11 @@ class SignInActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        this.overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right)
     }
 }

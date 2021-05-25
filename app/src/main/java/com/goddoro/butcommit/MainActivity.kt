@@ -3,8 +3,9 @@ package com.goddoro.butcommit
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.widget.Toast
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.goddoro.butcommit.databinding.ActivityMainBinding
 import com.goddoro.butcommit.presentation.signIn.SignInActivity
@@ -27,6 +28,13 @@ class MainActivity : AppCompatActivity() {
     private val compositeDisposable = CompositeDisposable()
 
     private val appPreference: AppPreference by inject()
+
+    private val toastUtil : ToastUtil by inject()
+
+    private val dateUtil : DateUtil by inject()
+
+    private var diff = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,12 +48,39 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, appPreference.githubId + "님 환영합니다")
         Log.d(TAG, appPreference.startDate + "부터 시작하셨네요")
 
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor =  (ContextCompat.getColor(this,R.color.background_1))
+
+        initView()
         initFirebaseSetting()
         observeViewModel()
         checkIsLogin()
         setupBroadcast()
         setupRecyclerView()
         setupSwipeRefreshLayout()
+
+
+
+    }
+
+    private fun initView() {
+
+        var title : String = if ( appPreference.startDate != "") {
+
+            diff = dateUtil.calculateDiff(appPreference.startDate, dateUtil.getToday())
+
+            if ( diff == 0 ) {
+                "오늘 처음 잔디를 심으셨네요"
+            } else {
+                "잔디를 ${diff+1}번 심으셨습니다."
+            }
+
+        } else {
+            "커밋 쉬는중"
+        }
+
+        mBinding.txtTitle.text = title
 
     }
 
@@ -109,12 +144,19 @@ class MainActivity : AppCompatActivity() {
         mViewModel.apply {
 
             clickSignIn.observeOnce(this@MainActivity) {
-                startActivity(SignInActivity::class)
+                startActivity(SignInActivity::class, R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+            }
+
+            clickShare.observeOnce(this@MainActivity){
+
+            }
+
+            clickShare.observeOnce(this@MainActivity){
+
             }
 
             onLoadCompleted.observe(this@MainActivity, Observer {
-                if (it) Toast.makeText(this@MainActivity, "커밋 기록을 불러왔습니다", Toast.LENGTH_SHORT)
-                    .show()
+                if (it) toastUtil.makeToast("커밋 기록을 불러왔습니다").show()
                 if (it && mBinding.layoutRefresh.isRefreshing) {
 
                     mBinding.layoutRefresh.isRefreshing = false
@@ -123,10 +165,7 @@ class MainActivity : AppCompatActivity() {
             })
 
             errorInvoked.observe(this@MainActivity, Observer {
-
-                Toast.makeText(this@MainActivity, it.message.toString(), Toast.LENGTH_SHORT).show()
-
-
+                toastUtil.makeToast(it.message ?: "").show()
             })
         }
 

@@ -13,29 +13,40 @@ class SignInViewModel(
 ) : ViewModel() {
 
 
-    val githubId: MutableLiveData<String> = MutableLiveData()
+    val githubId: MutableLiveData<String> = MutableLiveData(appPreference.githubId)
 
-    val onRegisterCompleted: MutableLiveData<Boolean> = MutableLiveData()
+    val onRegisterCompleted: MutableLiveData<Boolean> = MutableLiveData(false)
+    val onUpdateCompleted : MutableLiveData<Boolean> = MutableLiveData(false)
     val errorInvoked: MutableLiveData<Throwable> = MutableLiveData()
 
     fun register() {
 
         viewModelScope.launch {
 
-            kotlin.runCatching {
+            if ( appPreference.githubId == "") {
 
-                if ( appPreference.githubId == "") userRepository.register(githubId.value ?: "", appPreference.curFcmToken)
-                else userRepository.update(
-                    username = githubId.value,
-                    isDoing = true,
-                    fcmToken = appPreference.curFcmToken
-                )
-            }.onSuccess {
-                onRegisterCompleted.value = true
-            }.onFailure {
-                errorInvoked.value = it
+                kotlin.runCatching {
+                    userRepository.register(githubId.value ?: "", appPreference.curFcmToken)
+                }.onSuccess {
+                    onRegisterCompleted.value = true
+                }.onFailure {
+                    errorInvoked.value = it
+                }
             }
+            else {
 
+                kotlin.runCatching {
+                    userRepository.update(
+                        username = githubId.value,
+                        isDoing = true,
+                        fcmToken = appPreference.curFcmToken
+                    )
+                }.onSuccess {
+                    onUpdateCompleted.value = true
+                }.onFailure {
+                    errorInvoked.value = it
+                }
+            }
         }
 
     }

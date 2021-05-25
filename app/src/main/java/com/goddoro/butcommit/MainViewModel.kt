@@ -22,6 +22,8 @@ class MainViewModel(
     val commits: MutableLiveData<List<Commit>> = MutableLiveData()
 
     val clickSignIn : MutableLiveData<Once<Unit>> = MutableLiveData()
+    val clickScreenShot : MutableLiveData<Once<Unit>> = MutableLiveData()
+    val clickShare : MutableLiveData<Once<Unit>> = MutableLiveData()
     val onLoadCompleted: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val errorInvoked : MutableLiveData<Throwable> = MutableLiveData()
@@ -39,6 +41,7 @@ class MainViewModel(
                 commits.value = it
                 onLoadCompleted.value = true
             }.onFailure {
+                onLoadCompleted.value = true
                 errorInvoked.value = it
             }
         }
@@ -52,6 +55,14 @@ class MainViewModel(
     fun onClickSignIn() {
 
         clickSignIn.value = Once(Unit)
+    }
+
+    fun onClickScreenShot() {
+        clickScreenShot.value = Once(Unit)
+    }
+
+    fun onClickShare() {
+        clickShare.value = Once(Unit)
     }
 
 }

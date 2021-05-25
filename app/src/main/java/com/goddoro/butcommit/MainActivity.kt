@@ -2,6 +2,7 @@ package com.goddoro.butcommit
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import androidx.lifecycle.Observer
 import com.goddoro.butcommit.databinding.ActivityMainBinding
 import com.goddoro.butcommit.presentation.signIn.SignInActivity
 import com.goddoro.butcommit.utils.*
+import com.goddoro.butcommit.utils.component.InformationDialog
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.disposables.CompositeDisposable
@@ -60,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         setupSwipeRefreshLayout()
 
+        InformationDialog.show(supportFragmentManager,"goddoro")
 
 
     }
@@ -115,7 +118,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkIsLogin() {
 
         if (appPreference.githubId == "") {
-            startActivity(SignInActivity::class)
+            startActivity(SignInActivity::class, R.anim.slide_in_from_right, R.anim.slide_out_to_left)
         }
     }
 
@@ -156,7 +159,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             onLoadCompleted.observe(this@MainActivity, Observer {
-                if (it) toastUtil.makeToast("커밋 기록을 불러왔습니다").show()
+                if (it){
+                    toastUtil.makeToast("커밋 기록을 업데이트했습니다", Gravity.CENTER).show()
+
+                    if ((commits.value ?: listOf()).isNotEmpty() && ( commits.value ?: listOf())[0].count > 0 ) {
+                        mBinding.animGrass.playAnimation()
+                    }
+                }
                 if (it && mBinding.layoutRefresh.isRefreshing) {
 
                     mBinding.layoutRefresh.isRefreshing = false

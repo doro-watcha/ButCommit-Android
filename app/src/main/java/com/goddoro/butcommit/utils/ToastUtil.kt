@@ -11,7 +11,7 @@ import com.goddoro.butcommit.databinding.ViewCustomToastBinding
 
 class ToastUtil ( val context : Context) {
 
-    fun makeToast( message: String): Toast {
+    fun makeToast( message: String, position : Int? = Gravity.BOTTOM): Toast {
         val inflater = LayoutInflater.from(context)
         val binding: ViewCustomToastBinding =
             DataBindingUtil.inflate(inflater, R.layout.view_custom_toast, null, false)
@@ -19,7 +19,7 @@ class ToastUtil ( val context : Context) {
         binding.tvSample.text = message
 
         return Toast(context).apply {
-            setGravity(Gravity.BOTTOM or Gravity.CENTER, 0, 16.toPx())
+            setGravity(position ?: Gravity.BOTTOM, 0, 16.toPx())
             duration = Toast.LENGTH_SHORT
             view = binding.root
         }

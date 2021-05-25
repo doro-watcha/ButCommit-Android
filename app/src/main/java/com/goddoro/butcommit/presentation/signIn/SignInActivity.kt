@@ -16,6 +16,9 @@ import com.goddoro.butcommit.databinding.ActivitySignInBinding
 import com.goddoro.butcommit.utils.AppPreference
 import com.goddoro.butcommit.utils.Broadcast.onLoginCompleted
 import com.goddoro.butcommit.utils.DateUtil
+import com.goddoro.butcommit.utils.ToastUtil
+import com.goddoro.butcommit.utils.component.TextDoubleDialog
+import com.goddoro.butcommit.utils.observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -31,6 +34,8 @@ class SignInActivity : AppCompatActivity() {
 
     private val dateUtil : DateUtil by inject()
 
+    private val toastUtil : ToastUtil by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,8 +46,8 @@ class SignInActivity : AppCompatActivity() {
 
         observeViewModel()
 
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor =  (ContextCompat.getColor(this, R.color.white))
     }
 
@@ -50,9 +55,24 @@ class SignInActivity : AppCompatActivity() {
 
         mViewModel.apply {
 
+            clickLoginButton.observeOnce(this@SignInActivity){
+                TextDoubleDialog.show(
+                    fm = supportFragmentManager,
+                    title = "경고",
+                    body = "${appPreference.githubId}의 커밋 기록이 초괴화 됩니다.\ngithub 계정을 변경하시겠습니까?",
+                    onPositive = {
+                        update()
+                    },
+                    onNegative = {
+
+                    }
+                )
+            }
+
             onRegisterCompleted.observe(this@SignInActivity, Observer {
-                Toast.makeText(this@SignInActivity,"로그인에 성공하였습니다",Toast.LENGTH_SHORT).show()
+
                 if ( it == true ) {
+                    toastUtil.makeToast("로그인에 성공하였습니다").show()
                     appPreference.githubId = githubId.value ?: ""
                     appPreference.startDate = dateUtil.getToday()
                     onLoginCompleted.onNext(Unit)
@@ -60,9 +80,6 @@ class SignInActivity : AppCompatActivity() {
                 }
             })
 
-            onUpdateCompleted.observe(this@SignInActivity, Observer {
-
-            })
 
             errorInvoked.observe(this@SignInActivity, Observer {
                 Log.d(TAG, it.message.toString())
@@ -86,8 +103,9 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+
+    override fun onBackPressed() {
+        super.onBackPressed()
 
         this.overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right)
     }

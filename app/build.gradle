@@ -139,6 +139,9 @@ dependencies {
     implementation "androidx.databinding:databinding-adapters:3.6.3"
     implementation "androidx.databinding:databinding-common:3.6.3"
 
+    // Lottie
+    implementation 'com.airbnb.android:lottie:3.4.0'
+
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha01"
 

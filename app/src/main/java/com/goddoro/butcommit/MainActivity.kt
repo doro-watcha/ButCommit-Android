@@ -12,6 +12,7 @@ import com.goddoro.butcommit.databinding.ActivityMainBinding
 import com.goddoro.butcommit.presentation.signIn.SignInActivity
 import com.goddoro.butcommit.utils.*
 import com.goddoro.butcommit.utils.component.InformationDialog
+import com.goddoro.butcommit.utils.component.showInformationDialog
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.disposables.CompositeDisposable
@@ -62,7 +63,6 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         setupSwipeRefreshLayout()
 
-        InformationDialog.show(supportFragmentManager,"goddoro")
 
 
     }
@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
         Broadcast.apply {
 
-            onLoginCompleted.subscribe {
+            registerCompleteBroadcast.subscribe {
                 mViewModel.refresh()
             }.disposedBy(compositeDisposable)
         }

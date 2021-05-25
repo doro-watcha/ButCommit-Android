@@ -4,5 +4,5 @@ import io.reactivex.subjects.PublishSubject
 
 object Broadcast {
 
-    val onLoginCompleted : PublishSubject<Unit> = PublishSubject.create()
+    val registerCompleteBroadcast : PublishSubject<String> = PublishSubject.create()
 }

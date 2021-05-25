@@ -14,10 +14,11 @@ import com.goddoro.butcommit.R
 import com.goddoro.butcommit.data.api.UnWrappingDataException
 import com.goddoro.butcommit.databinding.ActivitySignInBinding
 import com.goddoro.butcommit.utils.AppPreference
-import com.goddoro.butcommit.utils.Broadcast.onLoginCompleted
+import com.goddoro.butcommit.utils.Broadcast.registerCompleteBroadcast
 import com.goddoro.butcommit.utils.DateUtil
 import com.goddoro.butcommit.utils.ToastUtil
 import com.goddoro.butcommit.utils.component.TextDoubleDialog
+import com.goddoro.butcommit.utils.component.showInformationDialog
 import com.goddoro.butcommit.utils.observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,8 +35,6 @@ class SignInActivity : AppCompatActivity() {
 
     private val dateUtil : DateUtil by inject()
 
-    private val toastUtil : ToastUtil by inject()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,8 +45,6 @@ class SignInActivity : AppCompatActivity() {
 
         observeViewModel()
 
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor =  (ContextCompat.getColor(this, R.color.white))
     }
 
@@ -72,11 +69,17 @@ class SignInActivity : AppCompatActivity() {
             onRegisterCompleted.observe(this@SignInActivity, Observer {
 
                 if ( it == true ) {
-                    toastUtil.makeToast("로그인에 성공하였습니다").show()
                     appPreference.githubId = githubId.value ?: ""
                     appPreference.startDate = dateUtil.getToday()
-                    onLoginCompleted.onNext(Unit)
-                    finish()
+//                    appPreference.startDate = "2020-05-20"
+                    showInformationDialog(appPreference.githubId)
+                    registerCompleteBroadcast.onNext(appPreference.githubId)
+
+                    /**
+                     * update후 확인 버튼의 동기화를 위해서 값 재설정
+                     */
+                    githubId.value = appPreference.githubId
+
                 }
             })
 

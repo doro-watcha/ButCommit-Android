@@ -10,6 +10,7 @@ interface UserRepository {
     ) : Completable
 
     suspend fun update (
+        _username : String,
         username : String? = null,
         fcmToken : String? = null,
         isDoing : Boolean? = null

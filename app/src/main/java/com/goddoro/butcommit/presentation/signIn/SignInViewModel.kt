@@ -49,6 +49,7 @@ class SignInViewModel(
 
             kotlin.runCatching {
                 userRepository.update(
+                    _username = appPreference.githubId,
                     username = githubId.value,
                     isDoing = true,
                     fcmToken = appPreference.curFcmToken

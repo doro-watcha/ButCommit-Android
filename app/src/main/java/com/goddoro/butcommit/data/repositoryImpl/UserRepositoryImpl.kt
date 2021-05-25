@@ -16,9 +16,10 @@ class UserRepositoryImpl ( val api : UserAPI ) : UserRepository {
         return api.register(params).unWrapCompletable()
     }
 
-    override suspend fun update(username: String?, fcmToken: String?, isDoing: Boolean?): Completable {
+    override suspend fun update(_username : String, username: String?, fcmToken: String?, isDoing: Boolean?): Completable {
 
         val params = hashMapOf(
+            "_username" to _username,
             "username" to username,
             "fcmToken" to fcmToken,
             "isDoing" to isDoing

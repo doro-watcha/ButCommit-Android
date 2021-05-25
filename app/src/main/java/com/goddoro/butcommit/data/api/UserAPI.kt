@@ -13,6 +13,7 @@ interface UserAPI {
 
 
     @PATCH("/user")
+    @FormUrlEncoded
     suspend fun update ( @FieldMap parameters : HashMap<String,Any> ) : ApiResponse<Any>
 
 }

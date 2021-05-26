@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor =  (ContextCompat.getColor(this, R.color.background_1))
 
-        initTitle()
+
         initFirebaseSetting()
         observeViewModel()
         checkIsLogin()
@@ -72,13 +72,13 @@ class MainActivity : AppCompatActivity() {
 
         mBinding.txtTitle.text = if ( appPreference.startDate != "") {
 
-            if ( diff == 0 ) {
+            if ( appPreference.startDate == dateUtil.getToday() ) {
                 "오늘 처음 잔디를 심으셨네요"
             } else {
                 "잔디를 ${mViewModel.grassCount.value ?:0 +1}일 심으셨습니다."
             }
         } else {
-            "커밋 쉬는중"
+            "Github ID를 등록해주세요"
         }
     }
 

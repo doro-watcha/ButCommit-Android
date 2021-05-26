@@ -14,8 +14,8 @@ android {
         applicationId "com.goddoro.butcommit"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "beta 1.0.0"
 
         dataBinding.enabled = true
         multiDexEnabled true
